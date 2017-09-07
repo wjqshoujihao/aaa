@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jk.dao.JsDao">
+  <resultMap id="BaseResultMap" type="com.jk.entity.Js" >
+    <id column="SHID" property="jsid" jdbcType="INTEGER" />
+    <result column="JSNAME" property="jsname" jdbcType="VARCHAR" />
+    <result column="JSMS" property="jsms" jdbcType="VARCHAR" />
+    <result column="CJTIME" property="cjtime" jdbcType="TIMESTAMP" />
+    <result column="XGTIME" property="xgtime" jdbcType="TIMESTAMP" />
+    <result column="JSPX" property="jspx" jdbcType="INTEGER" />
+  </resultMap>
+  	
+  <select id="jslist" resultMap="BaseResultMap" parameterType="com.jk.entity.Js">
+  	 select * from t_js
+  	 <where>
+      <if test="jsname!=null and jsname!='' ">
+       and jsname like '%#{jsname}%'
+      </if>
+       <if test="cjks!=null">
+        and cjtime &gt; #{cjks}
+      </if>
+      <if test="cjjs!=null">
+     and cjtime &lt; #{cjjs}
+      </if>
+    </where>
+  	 limit #{page},#{rows}
+  </select>
+  <insert id="jsadd" parameterType="com.jk.entity.Js">
+  	insert into t_js (jsname ,jsms,jspx, cjtime) VALUES(#{jsname},#{jsms},#{jspx},#{cjtime})
+  </insert>
+  <delete id="deletejs" parameterType="string">
+  	 DELETE FROM t_js WHERE jsid IN  
+    <foreach collection="array" index="index" item="item" open="(" separator="," close=")">   
+        #{item}   
+    </foreach> 
+  </delete>
+  <select id="count"  resultType="Long" parameterType="com.jk.entity.Js">
+  	 select count(*) from t_js
+  	 <where>
+      <if test="jsname!=null">
+        jsname like '%${jsname}%'
+      </if>
+    </where>
+  	 
+  </select>
+  <select id="toupdatejs" parameterType="string" resultType="com.jk.entity.Js">
+  	 select * from t_js where jsid = #{jsid}
+  </select>
+  <update id="updatejs" parameterType="com.jk.entity.Js">
+	   update t_js SET xgtime = #{xgtime},
+	   <if  test="jsname!=null" >
+	      jsname = #{jsname},
+	    </if>
+	   <if test="jsms!=null">
+	    jsms = #{jsms},
+	   </if>
+	    <if test="jspx!=null">
+	    jspx = #{jspx}
+	  </if>
+	 where jsid = #{jsid}
+	</update>
+	
+</mapper>
