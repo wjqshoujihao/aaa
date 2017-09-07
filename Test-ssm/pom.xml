@@ -10,6 +10,7 @@
   <dependencies>
    <!--引入spring-test对应的jar包 -->
    <!-- aa -->
+   <!-- bb-->
 	<dependency>
 		<groupId>org.springframework</groupId>
 		<artifactId>spring-test</artifactId>
